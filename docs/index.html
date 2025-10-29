@@ -9,13 +9,18 @@
 <body>
   <h1>Welcome to Xnet Chat</h1>
 
-  <div id="chat-box"></div>
-  <input type="text" id="chat-input" placeholder="Type your message..." />
-  <button onclick="sendMessage()">Send</button>
+  <div id="signup-area">
+    <input type="text" id="username-input" placeholder="Username" />
+    <input type="password" id="password-input" placeholder="Password" />
+    <button onclick="signUp()">Sign Up</button>
+  </div>
 
-  <br /><br />
-
-  <button onclick="signUp()">Sign Up</button>
+  <div id="chat-area" style="display: none;">
+    <p id="welcome-message"></p>
+    <div id="chat-box"></div>
+    <input type="text" id="chat-input" placeholder="Type your message..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
 
   <script src="script.js"></script>
 </body>
