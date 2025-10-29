@@ -1,19 +1,155 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Xnet Signup</title>
+  <title>Xnet Chat — Fierwall</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: black;
+      overflow: hidden;
+      font-family: monospace;
+      color: #0f0;
+      text-align: center;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    #content {
+      position: relative;
+      z-index: 1;
+      padding: 20px;
+    }
+
+    input, button {
+      padding: 8px;
+      margin: 4px;
+      background-color: #222;
+      color: #0f0;
+      border: 1px solid #0f0;
+    }
+
+    #chatbox {
+      display: none;
+      margin: 20px auto;
+      width: 500px;
+      height: 600px;
+      border: 1px solid #0f0;
+    }
+
+    #displayName {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-  <h2>Sign Up</h2>
-  <form id="signup-form">
-    <input type="text" id="username" placeholder="Username" required /><br />
-    <input type="password" id="password" placeholder="Password" required /><br />
-    <button type="submit">Sign Up</button>
-  </form>
+  <canvas id="matrix"></canvas>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <script src="script.js"></script>
+  <div id="content">
+    <h1>Xnet Chat — Fierwall</h1>
+
+    <div style="margin-top: 20px;">
+      <p>Talk freely. No filters. No surveillance.</p>
+      <p>The internet was meant to be free. We’re bringing it back.</p>
+      <p>Encrypted. Anonymous. Yours.</p>
+    </div>
+
+    <div id="namePrompt">
+      <input id="username" placeholder="Enter your name" />
+      <button onclick="joinChat()">Join Chat</button>
+    </div>
+
+    <div id="displayName" style="display:none;"></div>
+
+    <div id="chatbox">
+      <iframe
+        src="your-private-chat.html"
+        width="100%"
+        height="100%"
+        style="border:none;"
+        allowtransparency="true">
+      </iframe>
+    </div>
+  </div>
+
+  <script>
+    // Matrix rain animation
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    resizeCanvas();
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      initMatrix();
+    });
+
+    const letters = "アァイィウヴエカキクケコサシスセソABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const fontSize = 14;
+    let columns;
+    let drops;
+
+    function initMatrix() {
+      columns = Math.floor(canvas.width / fontSize);
+      drops = Array(columns).fill(1);
+    }
+
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#0f0";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+
+        drops[i]++;
+      }
+    }
+
+    window.onload = () => {
+      initMatrix();
+      setInterval(drawMatrix, 50);
+    };
+
+    // Name memory
+    const savedName = localStorage.getItem('guestName');
+    if (savedName) {
+      document.getElementById('username').value = savedName;
+    }
+
+    function joinChat() {
+      const name = document.getElementById('username').value.trim();
+      if (!name) return;
+
+      localStorage.setItem('guestName', name);
+
+      const display = document.getElementById('displayName');
+      display.textContent = `You are chatting as: ${name}`;
+      display.style.display = 'block';
+
+      document.getElementById('namePrompt').style.display = 'none';
+      document.getElementById('chatbox').style.display = 'block';
+    }
+  </script>
 </body>
 </html>
