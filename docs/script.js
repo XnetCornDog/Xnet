@@ -1,40 +1,75 @@
-const supabase = supabase.createClient(
-  'https://feotfbjqrmuutrinqmr.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlb3RmYmpxcm11dXRyaWlucW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2NjY3ODMsImV4cCI6MjA3NzI0Mjc4M30.QxwkvQ0wkbzFxvnv0QEcR1Z1cjRZUWZzag3G7j6W7A0'
-);
+// Initialize Supabase client
+const supabase = createClient('https://your-project-url.supabase.co', 'your-anon-key');
 
-// SIGN UP
-document.getElementById('signup-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const email = document.getElementById('signup-email').value;
-  const password = document.getElementById('signup-password').value;
-  const { data, error } = await supabase.auth.signUp({ email, password });
-  if (error) {
-    alert(error.message);
-  } else {
-    alert('Signup successful! Check your email to confirm.');
-  }
-});
+// SIGNUP FUNCTION
+async function signUp(email, password, username) {
+  // Check if username is taken
+  const { data: existingUser, error: checkError } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('username', username)
+    .single();
 
-// LOG IN
-document.getElementById('login-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const email = document.getElementById('login-email').value;
-  const password = document.getElementById('login-password').value;
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) {
-    alert(error.message);
-  } else {
-    alert('Login successful!');
+  if (existingUser) {
+    alert('Username is already taken');
+    return;
   }
-});
 
-// LOG OUT
-document.getElementById('logout-button').addEventListener('click', async () => {
-  const { error } = await supabase.auth.signOut();
-  if (error) {
-    alert(error.message);
-  } else {
-    alert('Logged out!');
+  // Sign up with email + password
+  const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+    email,
+    password,
+  });
+
+  if (signUpError) {
+    alert('Signup error: ' + signUpError.message);
+    return;
   }
-});
+
+  const user = signUpData.user;
+
+  // Insert profile with username
+  const { error: insertError } = await supabase.from('profiles').insert({
+    id: user.id,
+    username,
+  });
+
+  if (insertError) {
+    alert('Profile insert error: ' + insertError.message);
+    return;
+  }
+
+  alert('Signup successful!');
+}
+
+// LOGIN FUNCTION
+async function logIn(username, password) {
+  // Look up email by username
+  const { data: profile, error: lookupError } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('username', username)
+    .single();
+
+  if (!profile) {
+    alert('Username not found');
+    return;
+  }
+
+  const userId = profile.id;
+
+  // Log in with email (assuming email = userId + "@example.com")
+  const email = `${userId}@example.com`;
+
+  const { error: loginError } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (loginError) {
+    alert('Login error: ' + loginError.message);
+    return;
+  }
+
+  alert('Login successful!');
+}
