@@ -64,7 +64,7 @@
     const messageInput = document.getElementById('message');
     const sendBtn = document.getElementById('sendBtn');
 
-    // 🔌 Supabase setup
+    // 🔌 Supabase setup — moved to top to fix error
     const supabaseUrl = 'https://feotfbjqrmuutriinqmr.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlb3RmYmpxcm11dXRyaWlucW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2NjY3ODMsImV4cCI6MjA3NzI0Mjc4M30.QxwkvQ0wkbzFxvnv0QEcR1Z1cjRZUWZzag3G7j6W7A0';
     const supabase = supabase.createClient(supabaseUrl, supabaseKey);
