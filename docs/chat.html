@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Xnet Chat Room</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: black;
+      font-family: monospace;
+      color: #0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #chatHeader {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    #chatWindow {
+      width: 80%;
+      height: 60%;
+      border: 1px solid #0f0;
+      margin: 20px 0;
+      padding: 10px;
+      overflow-y: auto;
+      background-color: #111;
+    }
+    #chatInput {
+      display: flex;
+      width: 80%;
+    }
+    #message {
+      flex: 1;
+      padding: 8px;
+      background-color: #222;
+      color: #0f0;
+      border: 1px solid #0f0;
+    }
+    #sendBtn {
+      padding: 8px;
+      background-color: #222;
+      color: #0f0;
+      border: 1px solid #0f0;
+      margin-left: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div id="chatHeader">Welcome, <span id="usernameDisplay"></span></div>
+  <div id="chatWindow"></div>
+  <div id="chatInput">
+    <input type="text" id="message" placeholder="Type your message..." />
+    <button id="sendBtn">Send</button>
+  </div>
+
+  <script>
+    const username = localStorage.getItem('guestName') || 'Anonymous';
+    document.getElementById('usernameDisplay').textContent = username;
+
+    const chatWindow = document.getElementById('chatWindow');
+    const messageInput = document.getElementById('message');
+    const sendBtn = document.getElementById('sendBtn');
+
+    sendBtn.addEventListener('click', () => {
+      const text = messageInput.value.trim();
+      if (!text) return;
+      const msg = document.createElement('div');
+      msg.textContent = `${username}: ${text}`;
+      chatWindow.appendChild(msg);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+      messageInput.value = '';
+    });
+  </script>
+</body>
+</html>
