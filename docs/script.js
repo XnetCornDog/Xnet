@@ -1,12 +1,13 @@
-// Initialize Supabase client
+// script.js
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
 const supabase = createClient(
-  'https://your-project-url.supabase.co',
-  'your-anon-key-here'
+  'https://feotfbjqrmuutriinqmr.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZlb3RmYmpxcm11dXRyaWlucW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2NjY3ODMsImV4cCI6MjA3NzI0Mjc4M30.QxwkvQ0wkbzFxvnv0QEcR1Z1cjRZUWZzag3G7j6W7A0'
 );
 
 // SIGNUP FUNCTION
-async function signUp(username, password) {
-  // Check if username is taken
+export async function signUp(username, password) {
   const { data: existingUser, error: checkError } = await supabase
     .from('profiles')
     .select('id')
@@ -18,10 +19,8 @@ async function signUp(username, password) {
     return;
   }
 
-  // Create fake email from username
   const email = `${username}@user.local`;
 
-  // Sign up with fake email + password
   const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email,
     password,
@@ -34,7 +33,6 @@ async function signUp(username, password) {
 
   const user = signUpData.user;
 
-  // Insert profile with real username
   const { error: insertError } = await supabase.from('profiles').insert({
     id: user.id,
     username,
@@ -49,7 +47,7 @@ async function signUp(username, password) {
 }
 
 // LOGIN FUNCTION
-async function logIn(username, password) {
+export async function logIn(username, password) {
   const email = `${username}@user.local`;
 
   const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
@@ -62,7 +60,6 @@ async function logIn(username, password) {
     return;
   }
 
-  // Fetch profile to get username
   const user = loginData.user;
 
   const { data: profile, error: profileError } = await supabase
