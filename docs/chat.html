@@ -46,7 +46,7 @@
       margin-left: 4px;
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js" defer></script>
 </head>
 <body>
   <div id="chatHeader">Welcome, <span id="usernameDisplay"></span></div>
@@ -73,17 +73,30 @@
         const content = messageInput.value.trim();
         if (!content) return;
 
-        await supabase.from('messages').insert([{ username, content }]);
-        messageInput.value = '';
+        console.log('Sending message:', content);
+        const { error } = await supabase
+          .from('messages')
+          .insert([{ username, content }], { returning: 'minimal' });
+
+        if (error) {
+          console.error('Insert error:', error.message);
+        } else {
+          messageInput.value = '';
+        }
       }
 
       sendBtn.addEventListener('click', sendMessage);
 
       async function loadMessages() {
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from('messages')
           .select('*')
           .order('timestamp', { ascending: true });
+
+        if (error) {
+          console.error('Load error:', error.message);
+          return;
+        }
 
         chatWindow.innerHTML = '';
         data.forEach(msg => {
