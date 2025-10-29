@@ -1,10 +1,13 @@
 // Initialize Supabase client
-const supabase = createClient('https://your-project-url.supabase.co', 'your-anon-key');
+const supabase = createClient(
+  'https://your-project-url.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ4cWZzZ3ZzZ3ZzZ3ZzZ3ZzZ3ZzZ3ZzZ3ZzIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTYwMDAwMDAsImV4cCI6MjAwMTU3NjAwMH0.abc123xyz456youractualkeyhere'
+);
 
 // SIGNUP FUNCTION
 async function signUp(email, password, username) {
   // Check if username is taken
-  const { data: existingUser, error: checkError } = await supabase
+  const { data: existingUser } = await supabase
     .from('profiles')
     .select('id')
     .eq('username', username)
@@ -43,24 +46,7 @@ async function signUp(email, password, username) {
 }
 
 // LOGIN FUNCTION
-async function logIn(username, password) {
-  // Look up email by username
-  const { data: profile, error: lookupError } = await supabase
-    .from('profiles')
-    .select('id')
-    .eq('username', username)
-    .single();
-
-  if (!profile) {
-    alert('Username not found');
-    return;
-  }
-
-  const userId = profile.id;
-
-  // Log in with email (assuming email = userId + "@example.com")
-  const email = `${userId}@example.com`;
-
+async function logIn(email, password) {
   const { error: loginError } = await supabase.auth.signInWithPassword({
     email,
     password,
