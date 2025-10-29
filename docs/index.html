@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
   <title>Xnet Chat — Fierwall</title>
   <style>
     html, body {
@@ -8,10 +9,11 @@
       padding: 0;
       height: 100%;
       background-color: black;
-      overflow: hidden;
-      font-family: monospace;
+      font-family: 'Courier New', Courier, monospace;
       color: #0f0;
       text-align: center;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
 
     canvas {
@@ -30,11 +32,24 @@
     }
 
     input, button {
-      padding: 8px;
-      margin: 4px;
+      padding: 10px;
+      margin: 6px;
       background-color: #222;
       color: #0f0;
       border: 1px solid #0f0;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    input:focus, button:focus {
+      outline: none;
+      box-shadow: 0 0 5px #0f0;
+    }
+
+    button:hover {
+      background-color: #0f0;
+      color: black;
+      cursor: pointer;
     }
 
     #chatbox {
@@ -48,6 +63,13 @@
     #displayName {
       margin-top: 20px;
       font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+      #chatbox {
+        width: 95%;
+        height: 400px;
+      }
     }
   </style>
 </head>
@@ -76,6 +98,7 @@
         width="100%"
         height="100%"
         style="border:none;"
+        allow="clipboard-write"
         allowtransparency="true">
       </iframe>
     </div>
@@ -150,6 +173,10 @@
       document.getElementById('namePrompt').style.display = 'none';
       document.getElementById('chatbox').style.display = 'block';
     }
+
+    document.getElementById('username').addEventListener('keypress', e => {
+      if (e.key === 'Enter') joinChat();
+    });
   </script>
 </body>
 </html>
