@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Xnet Chat — Fierwall</title>
+  <title>Xnet Chat Room</title>
   <style>
     html, body {
       margin: 0;
@@ -11,172 +11,140 @@
       background-color: black;
       font-family: 'Courier New', Courier, monospace;
       color: #0f0;
-      text-align: center;
-      overflow-x: hidden;
-      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-
-    #content {
-      position: relative;
-      z-index: 1;
-      padding: 20px;
-    }
-
-    input, button {
-      padding: 10px;
-      margin: 6px;
-      background-color: #222;
-      color: #0f0;
-      border: 1px solid #0f0;
-      border-radius: 4px;
-      font-size: 1rem;
-    }
-
-    input:focus, button:focus {
-      outline: none;
-      box-shadow: 0 0 5px #0f0;
-    }
-
-    button:hover {
-      background-color: #0f0;
-      color: black;
-      cursor: pointer;
-    }
-
-    #chatbox {
-      display: none;
-      margin: 20px auto;
-      width: 500px;
-      height: 600px;
-      border: 1px solid #0f0;
-    }
-
-    #displayName {
+    #chatHeader {
       margin-top: 20px;
       font-weight: bold;
     }
 
+    #chatWindow {
+      width: 80%;
+      height: 60%;
+      border: 1px solid #0f0;
+      margin: 20px 0;
+      padding: 10px;
+      overflow-y: auto;
+      background-color: #111;
+    }
+
+    #chatInput {
+      display: flex;
+      width: 80%;
+    }
+
+    #message {
+      flex: 1;
+      padding: 10px;
+      background-color: #222;
+      color: #0f0;
+      border: 1px solid #0f0;
+      font-size: 1rem;
+    }
+
+    #sendBtn {
+      padding: 10px;
+      background-color: #222;
+      color: #0f0;
+      border: 1px solid #0f0;
+      margin-left: 6px;
+      cursor: pointer;
+    }
+
+    #sendBtn:hover {
+      background-color: #0f0;
+      color: black;
+    }
+
     @media (max-width: 600px) {
-      #chatbox {
+      #chatWindow, #chatInput {
         width: 95%;
-        height: 400px;
       }
     }
   </style>
 </head>
 <body>
-  <canvas id="matrix"></canvas>
-
-  <div id="content">
-    <h1>Xnet Chat — Fierwall</h1>
-
-    <div style="margin-top: 20px;">
-      <p>Talk freely. No filters. No surveillance.</p>
-      <p>The internet was meant to be free. We’re bringing it back.</p>
-      <p>Encrypted. Anonymous. Yours.</p>
-    </div>
-
-    <div id="namePrompt">
-      <input id="username" placeholder="Enter your name" />
-      <button onclick="joinChat()">Join Chat</button>
-    </div>
-
-    <div id="displayName" style="display:none;"></div>
-
-    <div id="chatbox">
-      <iframe
-        src="chat.html"
-        width="100%"
-        height="100%"
-        style="border:none;"
-        allow="clipboard-write"
-        allowtransparency="true">
-      </iframe>
-    </div>
+  <div id="chatHeader">Welcome, <span id="usernameDisplay"></span></div>
+  <div id="chatWindow"></div>
+  <div id="chatInput">
+    <input type="text" id="message" placeholder="Type your message..." />
+    <button id="sendBtn">Send</button>
   </div>
 
-  <script>
-    // Matrix rain animation
-    const canvas = document.getElementById("matrix");
-    const ctx = canvas.getContext("2d");
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
+    const username = localStorage.getItem('guestName') || 'Anonymous';
+    document.getElementById('usernameDisplay').textContent = username;
 
-    resizeCanvas();
-    window.addEventListener('resize', () => {
-      resizeCanvas();
-      initMatrix();
-    });
+    const chatWindow = document.getElementById('chatWindow');
+    const messageInput = document.getElementById('message');
+    const sendBtn = document.getElementById('sendBtn');
 
-    const letters = "アァイィウヴエカキクケコサシスセソABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    const fontSize = 14;
-    let columns;
-    let drops;
+    const supabaseUrl = 'https://zlzyxshgyuethvhgrepjb.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpsenl4c2hneXVldHZoZ3JlcGpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE2NjI3NjUsImV4cCI6MjA3NzIzODc2NX0.gI-_FAHIa6s2shdiG6dhik7Hx1p_FUg3IKirLeW8_mE';
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
-    function initMatrix() {
-      columns = Math.floor(canvas.width / fontSize);
-      drops = Array(columns).fill(1);
-    }
+    async function sendMessage() {
+      const content = messageInput.value.trim();
+      if (!content) return;
 
-    function drawMatrix() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      const { error } = await supabase
+        .from('messages')
+        .insert([{ username, content }]);
 
-      ctx.fillStyle = "#0f0";
-      ctx.font = fontSize + "px monospace";
-
-      for (let i = 0; i < drops.length; i++) {
-        const text = letters.charAt(Math.floor(Math.random() * letters.length));
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-
-        drops[i]++;
+      if (error) {
+        console.error('Error sending message:', error.message);
+      } else {
+        messageInput.value = '';
       }
     }
 
-    window.onload = () => {
-      initMatrix();
-      setInterval(drawMatrix, 50);
-    };
+    async function loadMessages() {
+      const { data, error } = await supabase
+        .from('messages')
+        .select('*')
+        .order('created_at', { ascending: true });
 
-    // Name memory
-    const savedName = localStorage.getItem('guestName');
-    if (savedName) {
-      document.getElementById('username').value = savedName;
+      if (error) {
+        console.error('Error loading messages:', error.message);
+        return;
+      }
+
+      chatWindow.innerHTML = '';
+      data.forEach(msg => {
+        const msgEl = document.createElement('div');
+        msgEl.textContent = `${msg.username}: ${msg.content}`;
+        chatWindow.appendChild(msgEl);
+      });
+
+      chatWindow.scrollTop = chatWindow.scrollHeight;
     }
 
-    function joinChat() {
-      const name = document.getElementById('username').value.trim();
-      if (!name) return;
-
-      localStorage.setItem('guestName', name);
-
-      const display = document.getElementById('displayName');
-      display.textContent = `You are chatting as: ${name}`;
-      display.style.display = 'block';
-
-      document.getElementById('namePrompt').style.display = 'none';
-      document.getElementById('chatbox').style.display = 'block';
-    }
-
-    document.getElementById('username').addEventListener('keypress', e => {
-      if (e.key === 'Enter') joinChat();
+    sendBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', e => {
+      if (e.key === 'Enter') sendMessage();
     });
+
+    supabase
+      .channel('chat-room')
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'messages'
+      }, payload => {
+        const msg = payload.new;
+        const msgEl = document.createElement('div');
+        msgEl.textContent = `${msg.username}: ${msg.content}`;
+        chatWindow.appendChild(msgEl);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+      })
+      .subscribe();
+
+    loadMessages();
   </script>
 </body>
 </html>
