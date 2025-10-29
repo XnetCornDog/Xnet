@@ -10,3 +10,7 @@ function sendMessage() {
     chatBox.scrollTop = chatBox.scrollHeight;
   }
 }
+
+function signUp() {
+  alert("Sign-up clicked!");
+}
