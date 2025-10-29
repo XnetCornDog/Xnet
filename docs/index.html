@@ -3,24 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Xnet Chat</title>
+  <title>Xnet Login</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
-  <h1>Welcome to Xnet Chat</h1>
+  <h1>Welcome to Xnet</h1>
 
-  <div id="signup-area">
-    <input type="text" id="username-input" placeholder="Username" />
-    <input type="password" id="password-input" placeholder="Password" />
-    <button onclick="signUp()">Sign Up</button>
-  </div>
+  <h2>Sign Up</h2>
+  <form id="signup-form">
+    <input type="email" id="signup-email" placeholder="Email" required />
+    <input type="password" id="signup-password" placeholder="Password" required />
+    <button type="submit">Sign Up</button>
+  </form>
 
-  <div id="chat-area" style="display: none;">
-    <p id="welcome-message"></p>
-    <div id="chat-box"></div>
-    <input type="text" id="chat-input" placeholder="Type your message..." />
-    <button onclick="sendMessage()">Send</button>
-  </div>
+  <h2>Log In</h2>
+  <form id="login-form">
+    <input type="email" id="login-email" placeholder="Email" required />
+    <input type="password" id="login-password" placeholder="Password" required />
+    <button type="submit">Log In</button>
+  </form>
+
+  <h2>Log Out</h2>
+  <button id="logout-button">Log Out</button>
 
   <script src="script.js"></script>
 </body>
