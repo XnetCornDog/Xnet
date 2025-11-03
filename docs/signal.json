@@ -1,6 +1,6 @@
 {
   "signal": {
     "type": "offer",
-    "sdp": "v=0\r\no=- 4170599646450949925 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na=group:BUNDLE 0\r\na=extmap-allow-mixed\r\na=msid-semantic: WMS\r\nm=application 57742 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 136.38.130.102\r\na=candidate:3618980454 1 udp 2113937151 ae3c2b97-cae8-402f-9efc-454ac8bd3a17.local 57742 typ host generation 0 network-cost 999\r\na=candidate:1779784386 1 udp 1677729535 136.38.130.102 57742 typ srflx raddr 0.0.0.0 rport 0 generation 0 network-cost 999\r\na=ice-ufrag:w4/n\r\na=ice-pwd:WSNL8Yl5ClHWmhlenTGNaep5\r\na=fingerprint:sha-256 FB:A1:01:74:88:35:1D:C3:8E:B8:59:72:A6:8C:49:25:52:43:9D:B4:52:55:D9:E4:7F:28:C7:AD:45:EA:87:42\r\na=setup:actpass\r\na=mid:0\r\na=sctp-port:5000\r\na=max-message-size:262144\r\n"
+    "sdp": "v=0\r\no=- 764744428422992588 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na=group:BUNDLE 0\r\na=extmap-allow-mixed\r\na=msid-semantic: WMS\r\nm=application 54534 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 136.38.130.102\r\na=candidate:479092306 1 udp 2113937151 cc42713f-4710-4594-aab2-5a35e24d708f.local 54534 typ host generation 0 network-cost 999\r\na=candidate:3448281531 1 udp 1677729535 136.38.130.102 54534 typ srflx raddr 0.0.0.0 rport 0 generation 0 network-cost 999\r\na=ice-ufrag:OubH\r\na=ice-pwd:cG+USGGN7IGI6Dti3K0Csmw1\r\na=fingerprint:sha-256 F8:7D:A2:26:7C:5A:A5:98:6C:52:43:92:C2:08:CC:80:DE:BA:2F:D5:BC:7D:4B:2F:97:9B:9B:DF:C9:0C:E4:DD\r\na=setup:actpass\r\na=mid:0\r\na=sctp-port:5000\r\na=max-message-size:262144\r\n"
   }
 }
