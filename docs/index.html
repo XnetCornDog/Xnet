@@ -1,183 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Xnet Chat — Fierwall</title>
+  <title>Peer Chat</title>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      background-color: black;
-      font-family: 'Courier New', Courier, monospace;
-      color: #0f0;
-      text-align: center;
-      overflow-x: hidden;
-      overflow-y: auto;
-    }
-
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-
-    #content {
-      position: relative;
-      z-index: 1;
+    body {
+      font-family: Arial, sans-serif;
       padding: 20px;
+      background-color: #f0f0f0;
     }
-
-    input, button {
-      padding: 10px;
-      margin: 6px;
-      background-color: #222;
-      color: #0f0;
-      border: 1px solid #0f0;
-      border-radius: 4px;
-      font-size: 1rem;
+    h2 {
+      color: #333;
     }
-
-    input:focus, button:focus {
-      outline: none;
-      box-shadow: 0 0 5px #0f0;
+    textarea {
+      width: 100%;
+      height: 200px;
+      margin-bottom: 10px;
+      resize: none;
     }
-
-    button:hover {
-      background-color: #0f0;
-      color: black;
-      cursor: pointer;
+    input {
+      width: 80%;
+      padding: 8px;
     }
-
-    #chatbox {
-      display: none;
-      margin: 20px auto;
-      width: 500px;
-      height: 600px;
-      border: 1px solid #0f0;
-    }
-
-    #displayName {
-      margin-top: 20px;
-      font-weight: bold;
-    }
-
-    @media (max-width: 600px) {
-      #chatbox {
-        width: 95%;
-        height: 400px;
-      }
+    button {
+      padding: 8px;
     }
   </style>
 </head>
 <body>
-  <canvas id="matrix"></canvas>
+  <h2>Peer-to-Peer Chat</h2>
+  <textarea id="messages" readonly></textarea><br>
+  <input id="input" type="text" placeholder="Type a message" />
+  <button onclick="send()">Send</button>
 
-  <div id="content">
-    <h1>Xnet Chat — Fierwall</h1>
-
-    <div style="margin-top: 20px;">
-      <p>Talk freely. No filters. No surveillance.</p>
-      <p>The internet was meant to be free. We’re bringing it back.</p>
-      <p>Encrypted. Anonymous. Yours.</p>
-    </div>
-
-    <div id="namePrompt">
-      <input id="username" placeholder="Enter your name" />
-      <button onclick="joinChat()">Join Chat</button>
-    </div>
-
-    <div id="displayName" style="display:none;"></div>
-
-    <div id="chatbox">
-      <iframe
-        src="chat.html"
-        width="100%"
-        height="100%"
-        style="border:none;"
-        allow="clipboard-write"
-        allowtransparency="true">
-      </iframe>
-    </div>
-  </div>
-
-  <script>
-    // Matrix rain animation
-    const canvas = document.getElementById("matrix");
-    const ctx = canvas.getContext("2d");
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-
-    resizeCanvas();
-    window.addEventListener('resize', () => {
-      resizeCanvas();
-      initMatrix();
-    });
-
-    const letters = "アァイィウヴエカキクケコサシスセソABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    const fontSize = 14;
-    let columns;
-    let drops;
-
-    function initMatrix() {
-      columns = Math.floor(canvas.width / fontSize);
-      drops = Array(columns).fill(1);
-    }
-
-    function drawMatrix() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.fillStyle = "#0f0";
-      ctx.font = fontSize + "px monospace";
-
-      for (let i = 0; i < drops.length; i++) {
-        const text = letters.charAt(Math.floor(Math.random() * letters.length));
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-
-        drops[i]++;
-      }
-    }
-
-    window.onload = () => {
-      initMatrix();
-      setInterval(drawMatrix, 50);
-    };
-
-    // Name memory
-    const savedName = localStorage.getItem('guestName');
-    if (savedName) {
-      document.getElementById('username').value = savedName;
-    }
-
-    function joinChat() {
-      const name = document.getElementById('username').value.trim();
-      if (!name) return;
-
-      localStorage.setItem('guestName', name);
-
-      const display = document.getElementById('displayName');
-      display.textContent = `You are chatting as: ${name}`;
-      display.style.display = 'block';
-
-      document.getElementById('namePrompt').style.display = 'none';
-      document.getElementById('chatbox').style.display = 'block';
-    }
-
-    // Allow Enter key to trigger chat join
-    document.getElementById('username').addEventListener('keypress', e => {
-      if (e.key === 'Enter') joinChat();
-    });
-  </script>
+  <!-- Load SimplePeer from CDN -->
+  <script src="https://unpkg.com/simple-peer/simplepeer.min.js"></script>
+  <!-- Load your custom JavaScript -->
+  <script src="script.js"></script>
 </body>
 </html>
