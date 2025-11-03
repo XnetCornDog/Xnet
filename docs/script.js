@@ -9,9 +9,9 @@ async function init() {
     trickle: false
   });
 
-  peer.on("signal", async data => {
+  peer.on("signal", data => {
     if (isHost) {
-      console.log("Copy this signal and paste it into signal.json:");
+      console.log("Paste this into signal.json:");
       console.log(JSON.stringify({ signal: data }));
     }
   });
@@ -41,7 +41,7 @@ function send() {
   const input = document.getElementById("input");
   const messages = document.getElementById("messages");
 
-  if (connected && peer) {
+  if (peer && connected) {
     peer.send(input.value);
     messages.value += "You: " + input.value + "\n";
     input.value = "";
