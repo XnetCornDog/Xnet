@@ -1,53 +1,53 @@
-const SIGNAL_URL = "https://xnetcorndog.github.io/Xnet/signal.json";
+let peer;
+let connected = false;
 
-// Create peer
-const peer = new SimplePeer({
-  initiator: location.hash === "#host",
-  trickle: false
-});
+async function init() {
+  const isHost = location.hash === "#host";
 
-// Host: show signal and tell user to update signal.json manually
-peer.on("signal", data => {
-  if (location.hash === "#host") {
-    console.log("Copy this signal and paste it into signal.json:");
-    console.log(JSON.stringify({ signal: data }));
-    alert("Copy the signal from the console and paste it into signal.json on GitHub.");
-  }
-});
+  peer = new SimplePeer({
+    initiator: isHost,
+    trickle: false
+  });
 
-// Peer: fetch signal.json and connect
-async function connectToHost() {
-  if (location.hash !== "#host") {
+  peer.on("signal", async data => {
+    if (isHost) {
+      console.log("Copy this signal and paste it into signal.json:");
+      console.log(JSON.stringify({ signal: data }));
+    }
+  });
+
+  peer.on("connect", () => {
+    connected = true;
+    console.log("Connected!");
+  });
+
+  peer.on("data", data => {
+    const messages = document.getElementById("messages");
+    messages.value += "Peer: " + data + "\n";
+  });
+
+  if (!isHost) {
     try {
-      const res = await fetch(SIGNAL_URL);
-      const json = await res.json();
-      if (json.signal) {
-        peer.signal(json.signal);
-      } else {
-        alert("No signal found in signal.json yet. Try again in a moment.");
-      }
+      const res = await fetch("signal.json");
+      const { signal } = await res.json();
+      peer.signal(signal);
     } catch (err) {
-      console.error("Failed to fetch signal.json:", err);
+      console.error("Failed to load signal.json", err);
     }
   }
 }
 
-connectToHost();
-
-// Chat UI
-peer.on("connect", () => {
-  console.log("Connected!");
-});
-
-peer.on("data", data => {
-  const messages = document.getElementById("messages");
-  messages.value += "Peer: " + data + "\n";
-});
-
 function send() {
   const input = document.getElementById("input");
-  peer.send(input.value);
   const messages = document.getElementById("messages");
-  messages.value += "You: " + input.value + "\n";
-  input.value = "";
+
+  if (connected && peer) {
+    peer.send(input.value);
+    messages.value += "You: " + input.value + "\n";
+    input.value = "";
+  } else {
+    messages.value += "⚠️ Not connected yet.\n";
+  }
 }
+
+init();
