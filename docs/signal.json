@@ -1,1 +1,6 @@
-
+{
+  "signal": {
+    "type": "offer",
+    "sdp": "v=0\r\no=- 461173... (your full signal string here)"
+  }
+}
