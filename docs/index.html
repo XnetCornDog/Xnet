@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>Xnet Chat</title>
-  <!-- Load SimplePeer from CDN -->
-  <script src="https://unpkg.com/simple-peer@9.11.1/simplepeer.min.js"></script>
-  <!-- Load your script after SimplePeer -->
-  <script src="script.js" defer></script>
 </head>
 <body>
   <h2>Xnet Chat</h2>
   <textarea id="messages" rows="10" cols="50" readonly></textarea><br>
   <input id="input" type="text" placeholder="Type a message..." />
   <button onclick="send()">Send</button>
+
+  <!-- Load SimplePeer from CDN -->
+  <script src="https://unpkg.com/simple-peer@9.11.1/simplepeer.min.js"></script>
+  <!-- Load your script after SimplePeer -->
+  <script src="script.js"></script>
 </body>
 </html>
