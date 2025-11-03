@@ -1,6 +1,6 @@
 {
   "signal": {
     "type": "offer",
-    "sdp": "v=0\r\no=- 931729111616886702 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\n..."
+    "sdp": "v=0\r\no=- 4010615981312366 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na=group:BUNDLE 0\r\na=extmap-allow-mixed\r\na=msid-semantic: WMS\r\nm=application 55123 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 136.38.130.102\r\na=candidate:874940082 1 udp 2113937151 01eb9af5-cce7-4ccf-b14e-abfec3657b68.local 55123 typ host generation 0 network-cost 999\r\na=candidate:3844096347 1 udp 1677729535 136.38.130.102 55123 typ srflx raddr 0.0.0.0 rport 0 generation 0 network-cost 999\r\na=ice-ufrag:jcPn\r\na=ice-pwd:d3lHz/rEg+qkIU00QqjH12Uf\r\na=fingerprint:sha-256 BA:42:B8:DA:25:08:98:FB:EB:3F:AC:EF:B5:21:7C:5A:35:05:49:4F:08:E3:41:72:12:72:E2:3C:4D:FB:81:59\r\na=setup:actpass\r\na=mid:0\r\na=sctp-port:5000\r\na=max-message-size:262144\r\n"
   }
 }
