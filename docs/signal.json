@@ -1,6 +1,6 @@
 {
   "signal": {
     "type": "offer",
-    "sdp": "v=0\r\no=- 764744428422992588 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na=group:BUNDLE 0\r\na=extmap-allow-mixed\r\na=msid-semantic: WMS\r\nm=application 54534 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 136.38.130.102\r\na=candidate:479092306 1 udp 2113937151 cc42713f-4710-4594-aab2-5a35e24d708f.local 54534 typ host generation 0 network-cost 999\r\na=candidate:3448281531 1 udp 1677729535 136.38.130.102 54534 typ srflx raddr 0.0.0.0 rport 0 generation 0 network-cost 999\r\na=ice-ufrag:OubH\r\na=ice-pwd:cG+USGGN7IGI6Dti3K0Csmw1\r\na=fingerprint:sha-256 F8:7D:A2:26:7C:5A:A5:98:6C:52:43:92:C2:08:CC:80:DE:BA:2F:D5:BC:7D:4B:2F:97:9B:9B:DF:C9:0C:E4:DD\r\na=setup:actpass\r\na=mid:0\r\na=sctp-port:5000\r\na=max-message-size:262144\r\n"
+    "sdp": "v=0\r\no=- 1323831325349971293 2 IN IP4 127.0.0.1\r\ns=-\r\nt=0 0\r\na=group:BUNDLE 0\r\na=extmap-allow-mixed\r\na=msid-semantic: WMS\r\nm=application 51694 UDP/DTLS/SCTP webrtc-datachannel\r\nc=IN IP4 136.38.130.102\r\na=candidate:577117601 1 udp 2113937151 a6f46db5-cba3-487a-9eb0-99bc49405945.local 51694 typ host generation 0 network-cost 999\r\na=candidate:1066181969 1 udp 1677729535 136.38.130.102 51694 typ srflx raddr 0.0.0.0 rport 0 generation 0 network-cost 999\r\na=ice-ufrag:F6R0\r\na=ice-pwd:E/YT4wcV5sm7oafNa3Xcn9jf\r\na=fingerprint:sha-256 F1:CC:C7:32:28:4E:03:90:80:B0:91:CC:C0:F6:F0:5C:9B:02:3A:68:05:1C:45:26:51:81:2A:F7:80:5A:98:82\r\na=setup:actpass\r\na=mid:0\r\na=sctp-port:5000\r\na=max-message-size:262144\r\n"
   }
 }
